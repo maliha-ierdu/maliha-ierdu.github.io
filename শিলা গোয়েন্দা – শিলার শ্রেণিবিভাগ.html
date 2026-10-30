@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>শিলা গোয়েন্দা – পাথরের গল্প</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fffaf3;--card:#fff;--tx:#2a2118;--mut:#6b5d4f;--bd:#e8dccb;--pri:#d9480f;--ok:#2b8a3e;--bad:#c92a2a;--c4:#fff3bf;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1712;--card:#272019;--tx:#f5ece0;--mut:#b9a994;--bd:#3d3326}}
+:root[data-theme="dark"]{--bg:#1c1712;--card:#272019;--tx:#f5ece0;--mut:#b9a994;--bd:#3d3326}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'Noto Sans Bengali','Kalpurush','Nirmala UI',system-ui,sans-serif;line-height:1.7}
+.w{max-width:760px;margin:0 auto;padding:14px}
+h1{font-size:1.4rem;margin:.2rem 0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.xp{background:var(--card);border:2px solid var(--pri);border-radius:99px;padding:2px 14px;font-weight:700}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:10px 0}
+.tabs button{flex:1;min-width:104px;font:inherit;font-weight:600;padding:8px 6px;border:2px solid var(--bd);background:var(--card);color:var(--tx);border-radius:12px;cursor:pointer}
+.tabs button.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:12px}
+svg{width:100%;max-width:340px;display:block;margin:0 auto}
+.ly{cursor:pointer;transition:.2s}.ly:hover{opacity:.75}.ly.act{stroke:#fff;stroke-width:3}
+.btn{font:inherit;font-weight:600;border:2px solid var(--bd);background:var(--card);color:var(--tx);border-radius:12px;padding:8px 12px;margin:4px 4px 0 0;cursor:pointer}
+.btn:hover{border-color:var(--pri)}.btn.on{border-color:var(--pri);background:var(--pri);color:#fff}
+.btn.ok{background:var(--ok);color:#fff;border-color:var(--ok)}.btn.no{background:var(--bad);color:#fff;border-color:var(--bad)}
+.main{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tag{display:inline-block;background:var(--c4);color:#3a2e00;border-radius:8px;padding:0 8px;margin:2px;font-weight:600}
+.part{border-left:5px solid var(--pri);padding:4px 10px;margin:8px 0;background:var(--bg);border-radius:6px}
+.mut{color:var(--mut)}
+.bar{height:12px;background:var(--bd);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ok);transition:.3s}
+.big{font-size:1.15rem;font-weight:700}.ctr{text-align:center}
+</style>
+</head>
+<body>
+<div class="w">
+<div class="top"><h1>🕵️ শিলা গোয়েন্দা</h1><div class="xp">⭐ স্কোর: <span id="xp">0</span></div></div>
+<p class="mut" style="margin:0">নবম শ্রেণি · ভূগোল ও পরিবেশ · অধ্যায় ৪ – শিলার শ্রেণিবিভাগ</p>
+<div class="tabs" id="tabs">
+<button data-t="0" class="on">১. শিলা কার্ড 🪨</button><button data-t="1">২. ম্যাগমার যাত্রা 🌋</button><button data-t="2">৩. গোয়েন্দা 🔎</button><button data-t="3">৪. বাছাই ও রূপান্তর 🔄</button><button data-t="4">৫. কুইজ 🎯</button>
+</div>
+<div id="v"></div>
+</div>
+<script>
+var xp=0;
+function add(n){xp=Math.max(0,xp+n);document.getElementById('xp').textContent=String(xp).replace(/\d/g,function(d){return '০১২৩৪৫৬৭৮৯'[d]})}
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.random()*(i+1)|0,t=a[i];a[i]=a[j];a[j]=t}return a}
+function bn(n){return String(n).replace(/\d/g,function(d){return '০১২৩৪৫৬৭৮৯'[d]})}
+/* generic multiple-choice game */
+function mc(el,arr,n){var a=shuf(arr).slice(0,n),i=0,s=0;
+ (function go(){
+  if(i>=a.length){el.innerHTML='<div class="ctr"><p class="big">🎉 '+bn(s)+'/'+bn(a.length)+' সঠিক</p><p>'+(s==a.length?'পুরো নম্বর! তুমি সত্যিকারের শিলা-গোয়েন্দা 🏆':s>=a.length*.6?'দারুণ! আরেকবার খেললে পুরো নম্বর পাবে 💪':'উপরের কার্ড দেখে আবার খেলো 📖')+'</p><button class="btn main">আবার খেলি 🔁</button></div>';
+   el.querySelector('button').onclick=function(){mc(el,arr,n)};return}
+  var q=a[i];
+  el.innerHTML='<div class="bar"><i style="width:'+(i/a.length*100)+'%"></i></div><p class="mut">প্রশ্ন '+bn(i+1)+'/'+bn(a.length)+'</p><p class="big">'+q[0]+'</p>'+q[1].map(function(o,k){return '<button class="btn" data-i="'+k+'" style="display:block;width:100%;text-align:left">'+o+'</button>'}).join('')+'<p class="m"></p>';
+  var bs=el.querySelectorAll('[data-i]');
+  bs.forEach(function(b){b.onclick=function(){
+   bs.forEach(function(x){x.disabled=true});var m=el.querySelector('.m');
+   if(+b.dataset.i==q[2]){b.classList.add('ok');m.textContent='✅ সঠিক! +১০';add(10);s++}
+   else{b.classList.add('no');bs[q[2]].classList.add('ok');m.textContent='❌ সঠিক উত্তর সবুজে দেখো';add(-2)}
+   setTimeout(function(){i++;go()},1500)}});
+ })()}
+/* TAB 1 data */
+var R={
+ig:{n:'🌋 আগ্নেয় শিলা',c:'#c92a2a',al:'প্রাথমিক শিলা · অন্তরীভূত শিলা (স্তর নেই)',
+ how:'পৃথিবী ছিল উত্তপ্ত গ্যাসপিণ্ড। তাপ হারিয়ে তরল হলো, তারপর উপরিভাগ ঠান্ডা ও কঠিন হয়ে জমাট বাঁধল। আগ্নেয়গিরি বা ভূমিকম্পে ভূত্বকের ফাটল দিয়ে গলিত লাভা বের হয়ে শিলা গঠন করে।',
+ f:['স্ফটিকাকার/দানাদার','স্তর নেই','কঠিন ও কম ভঙ্গুর','জীবাশ্ম নেই','তুলনামূলক ভারী'],
+ e:['ব্যাসল্ট','গ্র্যানাইট'],
+ p:[['বহিঃজ আগ্নেয় শিলা','ম্যাগমা ভূপৃষ্ঠে বেরিয়ে (লাভা) শীতল হয়। দানা খুব সূক্ষ্ম, রং গাঢ়। উদাহরণ: ব্যাসল্ট, রায়োলাইট, অ্যান্ডিসাইট'],['অন্তঃজ আগ্নেয় শিলা','ম্যাগমা ভূপৃষ্ঠে না এসে ভূগর্ভে জমাট বাঁধে। দানা স্থূল, রং হালকা। উদাহরণ: গ্র্যানাইট, গ্যাব্রো, ডলোরাইট, ল্যাকোলিথ, ব্যাথোলিথ, ডাইক, সিল']]},
+sed:{n:'🏖️ পাললিক শিলা',c:'#a07a3c',al:'স্তরীভূত শিলা · জৈব শিলা (কয়লা, খনিজ তেল)',
+ how:'বৃষ্টি, বায়ু, তুষার, তাপ ও ঢেউয়ে আগ্নেয় শিলা ক্ষয় হয়ে কাঁকর, কাদা, বালি ও ধুলা হয়। জলস্রোত, বায়ু ও হিমবাহ তা বয়ে নিয়ে নিম্নভূমি, হ্রদ ও সাগরে জমা করে। স্তরে স্তরে জমে উপরের চাপে ও উত্তাপে কঠিন শিলা হয়।',
+ f:['স্তরীভূত','নরম ও হালকা','সহজে ক্ষয় হয়','জীবাশ্ম দেখা যায়','ছিদ্রযুক্ত'],
+ e:['বেলেপাথর','কয়লা','শেল','চুনাপাথর','কাদাপাথর','কেওলিন'],
+ p:[['তথ্য','ভূপৃষ্ঠের মোট আয়তনের ৫% দখল করে, কিন্তু মহাদেশীয় ভূত্বকের আবরণের ৭৫% ভাগই পাললিক শিলা।'],['তৈরির ৩ উপায়','যান্ত্রিক · জৈব · রাসায়নিক প্রক্রিয়া']]},
+met:{n:'🔥 রূপান্তরিত শিলা',c:'#6741d9',al:'আগ্নেয় ও পাললিক শিলার রূপ বদলে তৈরি',
+ how:'আগ্নেয় ও পাললিক শিলা প্রচণ্ড চাপ, উত্তাপ ও রাসায়নিক ক্রিয়ায় রূপ বদলে নতুন শিলা হয়। ভূআন্দোলন, অগ্ন্যুৎপাত, ভূমিকম্প ও ভূগর্ভের তাপ এই পরিবর্তন ঘটায়।',
+ f:['স্ফটিকযুক্ত','খুব কঠিন','জীবাশ্ম দেখা যায় না','কোনোটিতে ঢেউ খেলানো স্তর'],
+ e:['মার্বেল','কোয়ার্টজাইট','স্লেট','নিস','গ্রাফাইট'],
+ p:[['রূপান্তরের তালিকা','চুনাপাথর → মার্বেল · বেলেপাথর → কোয়ার্টজাইট · কাদা ও শেল → স্লেট · গ্র্যানাইট → নিস · কয়লা → গ্রাফাইট']]}};
+var seen={};
+function t0(){
+ var v=document.getElementById('v');
+ v.innerHTML='<div class="card ctr"><b>🌋 ম্যাগমা</b> → <b>আগ্নেয়</b> → <small class="mut">ক্ষয়, বহন, জমা</small> → <b>পাললিক</b> → <small class="mut">তাপ-চাপ</small> → <b>রূপান্তরিত</b> 🔥<br><small class="mut">(আগ্নেয় ও পাললিক – দুটোই রূপান্তরিত হতে পারে)</small></div><div class="card"><p>কোন শিলার কার্ড দেখবে? ট্যাপ করো 👇</p><div id="sel"></div></div><div class="card" id="inf"><p class="ctr mut">একটি শিলা বেছে নাও…</p></div>';
+ var sel=document.getElementById('sel');
+ function draw(k){sel.innerHTML=Object.keys(R).map(function(x){return '<button class="btn'+(x==k?' on':'')+'" data-k="'+x+'">'+R[x].n+'</button>'}).join('')}
+ draw('');
+ sel.onclick=function(e){var b=e.target.closest('[data-k]');if(!b)return;var k=b.dataset.k,d=R[k];draw(k);
+  document.getElementById('inf').innerHTML='<div class="big" style="color:'+d.c+'">'+d.n+'</div><div class="mut">'+d.al+'</div><p><b>কীভাবে তৈরি?</b> '+d.how+'</p><div><b>বৈশিষ্ট্য:</b> '+d.f.map(function(x){return '<span class="tag">'+x+'</span>'}).join('')+'</div><div><b>উদাহরণ:</b> '+d.e.map(function(x){return '<span class="tag">'+x+'</span>'}).join('')+'</div>'+d.p.map(function(p){return '<div class="part"><b>'+p[0]+'</b> – '+p[1]+'</div>'}).join('');
+  if(!seen[k]){seen[k]=1;add(5)}};
+}
+/* TAB 2 */
+var MI={
+cone:['মোচাকৃতি আগ্নেয়গিরি ও লাভা প্রবাহ','ভূপৃষ্ঠে','বহিঃজ আগ্নেয়','ম্যাগমা ফাটল দিয়ে বেরিয়ে লাভা হয়ে দ্রুত ঠান্ডা ও জমাট বাঁধে।','দানা খুব সূক্ষ্ম, রং গাঢ়','ব্যাসল্ট, রায়োলাইট, অ্যান্ডিসাইট'],
+dike:['ডাইক','অগভীর ভূগর্ভ','অন্তঃজ আগ্নেয়','ম্যাগমা শিলাস্তর কেটে খাড়াভাবে উঠে ভূগর্ভেই জমাট বাঁধে।','দানা স্থূল, রং হালকা','গ্র্যানাইট, গ্যাব্রো, ডলোরাইট'],
+sill:['সিল','অগভীর ভূগর্ভ','অন্তঃজ আগ্নেয়','ম্যাগমা দুই শিলাস্তরের মাঝে আনুভূমিকভাবে ঢুকে জমাট বাঁধে।','দানা স্থূল, রং হালকা','ডলোরাইট, গ্যাব্রো'],
+lac:['ল্যাকোলিথ','অগভীর ভূগর্ভ','অন্তঃজ আগ্নেয়','ম্যাগমা উপরের স্তরকে গম্বুজের মতো ঠেলে তুলে ভূগর্ভে জমাট বাঁধে।','দানা স্থূল, রং হালকা','গ্র্যানাইট, গ্যাব্রো'],
+bat:['ব্যাথোলিথ (প্লুটন)','গভীর ভূগর্ভ','অন্তঃজ আগ্নেয়','ভূগর্ভের অনেক গভীরে বিশাল আকারে ধীরে ঠান্ডা হয়ে জমাট বাঁধে।','দানা সবচেয়ে স্থূল, রং হালকা','গ্র্যানাইট']};
+var LV=['লাভা প্রবাহ / আগ্নেয়গিরি','ডাইক','সিল','ল্যাকোলিথ','ব্যাথোলিথ'];
+var MQ=[['ম্যাগমা ভূপৃষ্ঠে এসে ঠান্ডা হয়েছে; দানা সূক্ষ্ম, রং গাঢ়। এটি কোথায় তৈরি?',LV,0],['ভূগর্ভে শিলাস্তর কেটে খাড়া ফাটলে ম্যাগমা জমাট বেঁধেছে।',LV,1],['দুই শিলাস্তরের মাঝে আনুভূমিকভাবে ম্যাগমা জমেছে।',LV,2],['ম্যাগমা স্তরকে গম্বুজের মতো ঠেলে তুলে জমাট বেঁধেছে।',LV,3],['একেবারে গভীরে বিশাল, স্থূলদানার হালকা রঙের গ্র্যানাইট তৈরি হয়েছে।',LV,4],['ব্যাসল্ট শিলা কোথায় গঠিত হয়?',LV,0]];
+function t1(){
+ var v=document.getElementById('v');
+ v.innerHTML='<div class="card"><p>চিত্রের লাল অংশগুলো ম্যাগমা। যেকোনো অংশে <b>ট্যাপ</b> করে দেখো কোন স্তরে কোন আগ্নেয় শিলা তৈরি হয়! 👇</p><svg viewBox="0 0 320 270" role="img" aria-label="আগ্নেয় শিলার গঠন"><rect width="320" height="70" fill="#cfe8ff"/><rect y="70" width="320" height="200" fill="#6b5d4f"/><rect y="70" width="320" height="30" fill="#d9c7a3"/><rect y="100" width="320" height="30" fill="#b89b6a"/><rect y="130" width="320" height="30" fill="#e6d9bd"/><rect y="160" width="320" height="30" fill="#8f7650"/><path class="ly" data-m="bat" d="M0 270V215Q80 170 160 195T320 205V270Z" fill="#c92a2a"/><rect class="ly" data-m="dike" x="150" y="85" width="10" height="115" fill="#e03131"/><rect class="ly" data-m="sill" x="170" y="123" width="110" height="8" fill="#e03131"/><path class="ly" data-m="lac" d="M225 100Q268 70 312 100Z" fill="#e03131"/><rect x="266" y="100" width="5" height="100" fill="#e03131"/><polygon class="ly" data-m="cone" points="25,70 80,25 135,70" fill="#8a4b2a"/><polygon class="ly" data-m="cone" points="100,40 112,38 175,70 135,70" fill="#ff922b"/><text x="4" y="64" font-size="10" fill="#1c3d5a">ভূপৃষ্ঠ</text><text x="4" y="185" font-size="10" fill="#fff">অগভীর ভূগর্ভ</text><text x="110" y="258" font-size="10" fill="#fff">গভীর ভূগর্ভ</text></svg></div><div class="card" id="inf"><p class="ctr mut">চিত্রের একটি অংশে ট্যাপ করো…</p></div><div class="card"><p class="big">🎮 ম্যাগমা কোথায় থামল?</p><div id="g"></div></div>';
+ v.querySelector('svg').onclick=function(e){var el=e.target.closest('.ly');if(!el)return;var k=el.dataset.m,d=MI[k];
+  document.getElementById('inf').innerHTML='<div class="big">'+d[0]+'</div><div class="part"><b>📍 স্তর:</b> '+d[1]+'<br><b>🧬 ধরন:</b> '+d[2]+'<br><b>🔨 কীভাবে:</b> '+d[3]+'<br><b>🔬 বৈশিষ্ট্য:</b> '+d[4]+'<br><b>🪨 উদাহরণ:</b> '+d[5]+'</div>';
+  if(!seen[k]){seen[k]=1;add(5)}};
+ mc(document.getElementById('g'),MQ,6);
+}
+/* TAB 3 */
+var T3=['আগ্নেয় শিলা','পাললিক শিলা','রূপান্তরিত শিলা'];
+var CQ=[['স্তর নেই, দানাদার, জীবাশ্ম নেই, বেশ ভারী।',T3,0],['নরম, হালকা, ছিদ্রযুক্ত, গায়ে গাছের পাতার ছাপ।',T3,1],['খুব কঠিন, স্ফটিকযুক্ত, ঢেউ খেলানো স্তর, জীবাশ্ম নেই।',T3,2],['নদীর বালি-কাদা স্তরে স্তরে জমে তৈরি, সহজেই ক্ষয় হয়।',T3,1],['লাভা ঠান্ডা হয়ে জমাট বেঁধেছে, জীবাশ্ম নেই।',T3,0],['চুনাপাথর ভূগর্ভের প্রচণ্ড তাপ-চাপে বদলে গেছে।',T3,2],['ভূগর্ভে ম্যাগমা ধীরে ঠান্ডা হয়ে বড় দানার হালকা রঙের পাথর হয়েছে।',T3,0],['জীবদেহ থেকে উৎপন্ন, স্তরে স্তরে জমে তৈরি (যেমন কয়লা)।',T3,1],['স্তরীভূত, ভেতরে মাছের জীবাশ্ম পাওয়া গেছে।',T3,1],['গ্র্যানাইট প্রচণ্ড চাপে রূপ বদলে নিস হয়েছে।',T3,2]];
+function t2(){
+ var v=document.getElementById('v');
+ v.innerHTML='<div class="card"><p class="big">🔎 শিলা চেনার সূত্র</p><div class="part"><b>আগ্নেয়:</b> স্তর নেই · জীবাশ্ম নেই · দানাদার · ভারী</div><div class="part"><b>পাললিক:</b> স্তর আছে · জীবাশ্ম আছে · নরম, হালকা · ছিদ্র আছে</div><div class="part"><b>রূপান্তরিত:</b> খুব কঠিন · স্ফটিকযুক্ত · জীবাশ্ম নেই · ঢেউ খেলানো স্তর</div></div><div class="card"><p class="big">🕵️ রহস্যের সমাধান করো: নমুনাটি কোন শিলা?</p><div id="g"></div></div>';
+ mc(document.getElementById('g'),CQ,7);
+}
+/* TAB 4 */
+var T4=['বহিঃজ আগ্নেয়','অন্তঃজ আগ্নেয়','পাললিক','রূপান্তরিত'];
+var EX=[['ব্যাসল্ট',0],['রায়োলাইট',0],['অ্যান্ডিসাইট',0],['গ্র্যানাইট',1],['গ্যাব্রো',1],['ডলোরাইট',1],['বেলেপাথর',2],['কয়লা',2],['শেল',2],['চুনাপাথর',2],['মার্বেল',3],['স্লেট',3],['নিস',3],['গ্রাফাইট',3],['কোয়ার্টজাইট',3]];
+var OUT=['মার্বেল','কোয়ার্টজাইট','স্লেট','নিস','গ্রাফাইট'];
+var TR=[['চুনাপাথর','মার্বেল'],['বেলেপাথর','কোয়ার্টজাইট'],['কাদা ও শেল','স্লেট'],['গ্র্যানাইট','নিস'],['কয়লা','গ্রাফাইট']];
+function t3(){
+ var v=document.getElementById('v'),all=EX.map(function(x){return ['<b>'+x[0]+'</b> কোন ধরনের শিলা?',T4,x[1]]});
+ TR.forEach(function(t){var o=shuf([t[1]].concat(shuf(OUT.filter(function(x){return x!=t[1]})).slice(0,3)));all.push(['<b>'+t[0]+'</b> তাপ ও চাপে রূপ বদলে কী হয়?',o,o.indexOf(t[1])])});
+ v.innerHTML='<div class="card"><p class="big">🔄 উদাহরণ বাছাই ও রূপান্তর</p><p class="mut">শিলার নাম দেখে ধরন বলো, আবার কোন শিলা বদলে কী হয় তাও বলো। প্রতিবার নতুন প্রশ্ন আসবে!</p><div id="g"></div></div>';
+ mc(document.getElementById('g'),all,10);
+}
+/* TAB 5 */
+var O=['৫%','২৫%','৫০%','৭৫%'];
+var QZ=[['পাললিক শিলা ভূপৃষ্ঠের মোট আয়তনের কত শতাংশ?',O,0],['মহাদেশীয় ভূত্বকের আবরণের কত ভাগ পাললিক শিলা?',O,3],['আগ্নেয় শিলার অপর নাম কী?',['প্রাথমিক শিলা','স্তরীভূত শিলা','জৈব শিলা','নিস'],0],['পাললিক শিলার অপর নাম কী?',['অন্তরীভূত শিলা','স্তরীভূত শিলা','প্রাথমিক শিলা','রূপান্তরিত শিলা'],1],['ভূগর্ভের উত্তপ্ত তরল ম্যাগমা ভূপৃষ্ঠে এলে তাকে কী বলে?',['পলি','লাভা','স্লেট','নিস'],1],['কয়লা ও খনিজ তেলকে কোন শিলা বলা হয়?',['জৈব শিলা','প্রাথমিক শিলা','অন্তরীভূত শিলা','স্ফটিক শিলা'],0],['কোন শিলায় জীবাশ্ম দেখা যায়?',['আগ্নেয়','পাললিক','রূপান্তরিত','গ্র্যানাইট'],1],['কোনটি পাললিক শিলার বৈশিষ্ট্য নয়?',['স্তরীভূত','নরম ও হালকা','ছিদ্রযুক্ত','স্তর নেই ও ভারী'],3],['আগ্নেয় ও পাললিক শিলা প্রচণ্ড চাপ ও তাপে কী শিলায় পরিণত হয়?',['পাললিক','রূপান্তরিত','আগ্নেয়','জৈব'],1],['বহিঃজ আগ্নেয় শিলার দানা কেমন?',['স্থূল ও হালকা রং','সূক্ষ্ম ও গাঢ় রং','স্তরে স্তরে সাজানো','ঢেউ খেলানো'],1],['অন্তঃজ আগ্নেয় শিলা কোথায় জমাট বাঁধে?',['ভূপৃষ্ঠে','সাগরের তলায় পলি হয়ে','ভূগর্ভে','আগ্নেয়গিরির মুখে'],2]];
+function t4(){
+ var v=document.getElementById('v');
+ v.innerHTML='<div class="card"><p class="big">🎯 চূড়ান্ত কুইজ</p><div id="g"></div></div>';
+ mc(document.getElementById('g'),QZ,8);
+}
+var T=[t0,t1,t2,t3,t4];
+document.getElementById('tabs').onclick=function(e){var b=e.target.closest('button');if(!b)return;
+ this.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});T[+b.dataset.t]()};
+t0();
+</script>
+</body>
+</html>
