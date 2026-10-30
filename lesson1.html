@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>পৃথিবীর অভ্যন্তরীণ গঠন – মিশন আর্থ কোর</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fffaf3;--card:#fff;--tx:#2a2118;--mut:#6b5d4f;--bd:#e8dccb;--pri:#d9480f;--ok:#2b8a3e;--bad:#c92a2a;--c1:#8d6e4a;--c2:#e8590c;--c3:#f59f00;--c4:#fff3bf;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1712;--card:#272019;--tx:#f5ece0;--mut:#b9a994;--bd:#3d3326;--c4:#ffe066}}
+:root[data-theme="dark"]{--bg:#1c1712;--card:#272019;--tx:#f5ece0;--mut:#b9a994;--bd:#3d3326;--c4:#ffe066}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'Noto Sans Bengali','Kalpurush','Nirmala UI',system-ui,sans-serif;line-height:1.7}
+.w{max-width:760px;margin:0 auto;padding:14px}
+h1{font-size:1.4rem;margin:.2rem 0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.xp{background:var(--card);border:2px solid var(--pri);border-radius:99px;padding:2px 14px;font-weight:700}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:10px 0}
+.tabs button{flex:1;min-width:92px;font:inherit;font-weight:600;padding:8px 6px;border:2px solid var(--bd);background:var(--card);color:var(--tx);border-radius:12px;cursor:pointer}
+.tabs button.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:12px}
+svg{width:100%;max-width:320px;display:block;margin:0 auto}
+.ly{cursor:pointer;transition:.2s}.ly:hover{opacity:.8}.ly.act{stroke:var(--tx);stroke-width:3}
+.ghost{fill:none;stroke:var(--bd);stroke-dasharray:4 4}
+.btn{font:inherit;font-weight:600;border:2px solid var(--bd);background:var(--card);color:var(--tx);border-radius:12px;padding:8px 12px;margin:4px 4px 0 0;cursor:pointer}
+.btn:hover{border-color:var(--pri)}
+.btn.ok{background:var(--ok);color:#fff;border-color:var(--ok)}.btn.no{background:var(--bad);color:#fff;border-color:var(--bad)}
+.main{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tag{display:inline-block;background:var(--c4);color:#3a2e00;border-radius:8px;padding:0 8px;margin:2px;font-weight:600}
+.part{border-left:5px solid var(--pri);padding:4px 10px;margin:8px 0;background:var(--bg);border-radius:6px}
+.mut{color:var(--mut)}
+.bar{height:12px;background:var(--bd);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ok);width:0;transition:.3s}
+.big{font-size:1.15rem;font-weight:700}
+.ctr{text-align:center}
+</style>
+</head>
+<body>
+<div class="w">
+<div class="top"><h1>🌍 মিশন আর্থ কোর</h1><div class="xp">⭐ স্কোর: <span id="xp">0</span></div></div>
+<p class="mut" style="margin:0">নবম শ্রেণি · ভূগোল ও পরিবেশ · অধ্যায় ৪ – পৃথিবীর অভ্যন্তরীণ গঠন</p>
+<div class="tabs" id="tabs">
+<button data-t="0" class="on">১. চিনি 🔍</button><button data-t="1">২. গড়ি 🏗️</button><button data-t="2">৩. উপাদান 🧪</button><button data-t="3">৪. কুইজ 🎯</button><button data-t="4">৫. শিলা-খনিজ 🪨</button>
+</div>
+<div id="v"></div>
+</div>
+<script>
+var L={
+crust:{n:'ভূত্বক (Earth’s Crust)',c:'#8d6e4a',pos:'সবার উপরে – পাতলা খোসার মতো',th:'গড়ে ২০ কিমি',
+ f:['ভূপৃষ্ঠে শিলার কঠিন বহিরাবরণ','সব স্তরের মধ্যে সবচেয়ে পাতলা','পর্বত, মালভূমি, সমভূমি এই স্তরের উপরেই','নিচে প্রতি কিমিতে তাপ ৩০° সেলসিয়াস বাড়ে'],
+ p:[['🏔️ মহাদেশের তলদেশে','৩০–৪০ কিমি (গড়ে ৩৫)','সিয়াল = সিলিকন (Si) + অ্যালুমিনিয়াম (Al)'],['🌊 সমুদ্রতলে','মাত্র ৫ কিমি','সিমা = সিলিকন (Si) + ম্যাগনেসিয়াম (Mg), ব্যাসল্ট শিলা; সিয়ালের চেয়ে ভারী']]},
+bary:{n:'গুরুমণ্ডল (Barysphere)',c:'#e8590c',pos:'ভূত্বকের ঠিক নিচে',th:'প্রায় ২,৮৮৫ কিমি',
+ f:['মূলত ব্যাসল্ট শিলা দিয়ে গঠিত','উপাদান: সিলিকা, ম্যাগনেসিয়াম, লোহা, কার্বন ও অন্যান্য খনিজ'],
+ p:[['⬆️ ঊর্ধ্ব গুরুমণ্ডল','৭০০ কিমি পর্যন্ত','লোহা ও ম্যাগনেসিয়াম সমৃদ্ধ সিলিকেট খনিজ'],['⬇️ নিম্ন গুরুমণ্ডল','বাকি অংশ','আয়রন অক্সাইড, ম্যাগনেসিয়াম অক্সাইড ও সিলিকন ডাইঅক্সাইড সমৃদ্ধ খনিজ']]},
+cent:{n:'কেন্দ্রমণ্ডল (Centrosphere)',c:'#f59f00',pos:'গুরুমণ্ডলের নিচ থেকে পৃথিবীর কেন্দ্র পর্যন্ত',th:'প্রায় ৩,৪৮৬ কিমি',
+ f:['ভূকম্পন তরঙ্গ থেকে এর গঠন জানা গেছে','উপাদান: লোহা, নিকেল, পারদ ও সীসা','প্রধান দুই উপাদান: নিকেল (Ni) ও লোহা (Fe)'],
+ p:[['🔥 তরল বহিরাবরণ (বাইরের কোর)','২,২৭০ কিমি পুরু','তরল অবস্থা'],['⚪ কঠিন অন্তঃভাগ (ভেতরের কোর)','১,২১৬ কিমি পুরু','কঠিন অবস্থা, একেবারে কেন্দ্রে']]}
+};
+var xp=0,tab=0;
+function add(n){xp=Math.max(0,xp+n);document.getElementById('xp').textContent=xp}
+function earth(show,click,act){
+ var s='<svg viewBox="0 0 300 300" role="img" aria-label="পৃথিবীর স্তর">';
+ var arr=[['crust',140,'#8d6e4a'],['bary',118,'#e8590c'],['cent',80,'#f59f00'],['cent2',40,'#fff3bf']];
+ arr.forEach(function(a){var k=a[0]=='cent2'?'cent':a[0];
+  if(show.indexOf(k)>-1)s+='<circle class="ly'+(act==k?' act':'')+'" '+(click?'data-l="'+k+'" ':'')+'cx="150" cy="150" r="'+a[1]+'" fill="'+a[2]+'"/>';
+  else s+='<circle class="ghost" cx="150" cy="150" r="'+a[1]+'"/>';});
+ if(show.indexOf('crust')>-1)s+='<text x="150" y="26" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">ভূত্বক</text>';
+ if(show.indexOf('bary')>-1)s+='<text x="150" y="58" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">গুরুমণ্ডল</text>';
+ if(show.indexOf('cent')>-1)s+='<text x="150" y="108" text-anchor="middle" font-size="11" fill="#3a2e00" font-weight="700">তরল বাইরের কোর</text><text x="150" y="154" text-anchor="middle" font-size="10" fill="#3a2e00" font-weight="700">কঠিন</text><text x="150" y="167" text-anchor="middle" font-size="10" fill="#3a2e00" font-weight="700">ভেতরের কোর</text>';
+ return s+'</svg>';}
+function info(k){var d=L[k];
+ return '<div class="big" style="color:'+d.c+'">'+d.n+'</div><div class="mut">📍 '+d.pos+'</div><div class="big">📏 পুরুত্ব: '+d.th+'</div>'+
+ '<div>'+d.f.map(function(x){return '<span class="tag">'+x+'</span>'}).join('')+'</div>'+
+ d.p.map(function(p){return '<div class="part"><b>'+p[0]+'</b> – '+p[1]+'<br>'+p[2]+'</div>'}).join('');}
+/* TAB 1 */
+function t0(){
+ var v=document.getElementById('v'),seen={};
+ v.innerHTML='<div class="card"><p>ছবির যেকোনো স্তরে <b>ট্যাপ</b> করো। একটার পর একটা স্তরে ট্যাপ করে সবগুলো চিনে নাও! 👇</p><div id="ea"></div></div><div class="card" id="inf"><p class="ctr mut">একটি স্তরে ট্যাপ করো…</p></div><div class="card"><b>🧠 মনে রাখার উপায়:</b><p>ভূ-ত্বক পাতলা (২০) · গুরু-মণ্ডল মোটা (২,৮৮৫) · কেন্দ্র-মণ্ডল সবচেয়ে গভীর (৩,৪৮৬)। ভারী উপাদান ভেতরে, হালকা উপাদান বাইরে!</p></div>';
+ var ea=document.getElementById('ea');
+ ea.innerHTML=earth(['crust','bary','cent'],1,'');
+ ea.onclick=function(e){var el=e.target.closest('.ly');if(!el)return;var k=el.dataset.l;
+  ea.innerHTML=earth(['crust','bary','cent'],1,k);
+  document.getElementById('inf').innerHTML=info(k);
+  if(!seen[k]){seen[k]=1;add(5)}};
+}
+var RM=[['সমসত্ত্ব (সব অংশ একরকম) অজৈব পদার্থ','m'],['অসমসত্ত্ব পদার্থ','r'],['হীরা, সোনা, গন্ধক, পারদ','m'],['গ্রানাইট','r'],['সুনির্দিষ্ট রাসায়নিক সংকেত আছে','m'],['কোনো নির্দিষ্ট রাসায়নিক সংকেত নেই','r'],['এক বা একাধিক খনিজের মিশ্রণ','r'],['এক বা একাধিক মৌলের সমন্বয়ে গঠিত','m'],['সবসময় কঠিন ও স্ফটিকাকার','m'],['কঠিন হতে পারে, কিন্তু স্ফটিকাকার নাও হতে পারে','r'],['ধর্ম নিয়ন্ত্রিত হয় গঠনকারী মৌল দ্বারা','m'],['ধর্ম নিয়ন্ত্রিত হয় গঠনকারী খনিজ দ্বারা','r'],['চুনাপাথর (পাললিক)','r'],['ক্যালসাইট','m']];
+var ri=0,rsc=0;
+function t4(){
+ var v=document.getElementById('v');
+ var cmp='<div class="card"><p class="big">🪨 শিলা বনাম 💎 খনিজ</p><p>ভূত্বক শিলা দিয়ে গঠিত। শিলা তৈরি হয় এক বা একাধিক খনিজের মিশ্রণে। অর্থাৎ <b>খনিজ হলো উপাদান, শিলা হলো মিশ্রণ</b>।</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="part"><b>🪨 শিলা</b><br>• অসমসত্ত্ব পদার্থ<br>• রাসায়নিক সংকেত নেই<br>• কঠিন, তবে স্ফটিকাকার নাও হতে পারে<br>• ধর্ম নিয়ন্ত্রণ করে গঠনকারী খনিজ<br>• উদাহরণ: গ্রানাইট, নুড়ি, কাঁকর, বালি, কাদা</div><div class="part"><b>💎 খনিজ</b><br>• সমসত্ত্ব অজৈব পদার্থ<br>• সুনির্দিষ্ট রাসায়নিক সংকেত আছে<br>• কঠিন ও স্ফটিকাকার<br>• ধর্ম নিয়ন্ত্রণ করে গঠনকারী মৌল<br>• উদাহরণ: হীরা, সোনা, তামা, রুপা, পারদ, গন্ধক</div></div><p>💡 <b>চুনাপাথর</b> একটি পাললিক <u>শিলা</u>, আর তার মূল উপাদান <b>ক্যালসাইট</b> একটি <u>খনিজ</u>।</p><p>গঠনপ্রণালি অনুসারে শিলা ৩ প্রকার: <span class="tag">আগ্নেয় শিলা</span><span class="tag">পাললিক শিলা</span><span class="tag">রূপান্তরিত শিলা</span></p></div>';
+ if(ri>=RM.length){v.innerHTML=cmp+'<div class="card ctr"><p class="big">🎉 '+rsc+'/'+RM.length+' সঠিক</p><p>'+(rsc>=12?'তুমি শিলা-খনিজ বিশেষজ্ঞ! 🏆':'উপরের তুলনা আবার পড়ে খেলে দেখো 💪')+'</p><button class="btn main" id="rs">আবার খেলি 🔁</button></div>';document.getElementById('rs').onclick=function(){ri=0;rsc=0;t4()};return}
+ var it=RM[ri];
+ v.innerHTML=cmp+'<div class="card"><div class="bar"><i style="width:'+(ri/RM.length*100)+'%"></i></div><p class="mut">গেম '+(ri+1)+'/'+RM.length+' – এটি শিলার নাকি খনিজের?</p><p class="big ctr" style="font-size:1.2rem">'+it[0]+'</p><div class="ctr"><button class="btn" data-k="r">🪨 শিলা</button><button class="btn" data-k="m">💎 খনিজ</button></div><p id="m" class="ctr"></p></div>';
+ v.querySelectorAll('[data-k]').forEach(function(b){b.onclick=function(){var m=document.getElementById('m');
+  v.querySelectorAll('[data-k]').forEach(function(x){x.disabled=true});
+  if(b.dataset.k==it[1]){b.classList.add('ok');m.textContent='✅ সঠিক! +১০';add(10);rsc++}
+  else{b.classList.add('no');m.textContent='❌ সঠিক উত্তর: '+(it[1]=='r'?'শিলা':'খনিজ');add(-2)}
+  setTimeout(function(){ri++;t4()},1300)}});
+}
+function t0old(){
+ var v=document.getElementById('v');
+ v.innerHTML='<div class="card"><p>ছবির যেকোনো স্তরে <b>ট্যাপ</b> করো। প্রতিটি স্তর আলাদা করে চিনে নাও! 👇</p>'+earth(['crust','bary','cent'],1,'')+'</div><div class="card" id="inf"><p class="ctr mut">একটি স্তরে ট্যাপ করো…</p></div><div class="card"><b>🧠 মনে রাখার ছড়া:</b><p>ভূ-ত্বক পাতলা (২০) · গুরু-মণ্ডল মোটা (২,৮৮৫) · কেন্দ্র-মণ্ডল সবচেয়ে গভীর (৩,৪৮৬)। ভারী উপাদান ভেতরে, হালকা উপাদান বাইরে!</p></div>';
+ var seen={};
+ v.querySelectorAll('.ly').forEach(function(e){e.onclick=function(){var k=e.dataset.l;
+  v.querySelector('.card').innerHTML='<p>ছবির যেকোনো স্তরে <b>ট্যাপ</b> করো। 👇</p>'+earth(['crust','bary','cent'],1,k);
+  bind();document.getElementById('inf').innerHTML=info(k);
+  if(!seen[k]){seen[k]=1;add(5)}}});
+ function bind(){v.querySelectorAll('.ly').forEach(function(e){e.onclick=v.querySelector('.ly').onclick&&function(){var k=e.dataset.l;
+  v.querySelector('.card').innerHTML='<p>ছবির যেকোনো স্তরে <b>ট্যাপ</b> করো। 👇</p>'+earth(['crust','bary','cent'],1,k);bind();
+  document.getElementById('inf').innerHTML=info(k);if(!seen[k]){seen[k]=1;add(5)}}})}
+}
+/* TAB 2 */
+var bs=0,bShown=[];
+var BQ=[
+ {q:'পৃথিবী ছিল উত্তপ্ত গ্যাসপিণ্ড। ঠান্ডা হওয়ার সময় সবচেয়ে ভারী উপাদান (লোহা, নিকেল) কোথায় জমল? কোন স্তর আগে তৈরি হলো?',a:'cent',h:'ভারী জিনিস নিচে ডোবে – তাই একেবারে কেন্দ্রে!',ok:'ঠিক! ভারী লোহা-নিকেল কেন্দ্রে জমে কেন্দ্রমণ্ডল (৩,৪৮৬ কিমি) তৈরি হলো।'},
+ {q:'কেন্দ্রের উপরে মাঝারি ভারী উপাদান (সিলিকা, ম্যাগনেসিয়াম, লোহা) জমল। এবার কোন স্তর যোগ হবে?',a:'bary',h:'কেন্দ্র আর ভূত্বকের মাঝখানের স্তর।',ok:'দারুণ! ব্যাসল্ট শিলার গুরুমণ্ডল (২,৮৮৫ কিমি) কেন্দ্রমণ্ডলের উপর যোগ হলো।'},
+ {q:'সবচেয়ে হালকা উপাদানগুলো ঠান্ডা হয়ে একদম উপরে জমল। শেষ স্তর কোনটি?',a:'crust',h:'আমরা এর উপরেই বাস করি!',ok:'অসাধারণ! গড়ে ২০ কিমি পুরু পাতলা ভূত্বক সবার উপরে বসল।'}];
+function t1(){
+ var v=document.getElementById('v'),done=bs>=3;
+ var h='<div class="card"><div class="bar"><i style="width:'+(bs/3*100)+'%"></i></div><p class="mut">ধাপ '+Math.min(bs+1,3)+'/৩ – ভেতর থেকে বাইরে একটার সাথে একটা যোগ করো</p>'+earth(bShown,0,'')+'</div>';
+ if(!done){var q=BQ[bs];h+='<div class="card"><p class="big">'+q.q+'</p><div id="o">'+[['cent','কেন্দ্রমণ্ডল'],['bary','গুরুমণ্ডল'],['crust','ভূত্বক']].filter(function(x){return bShown.indexOf(x[0])<0}).map(function(x){return '<button class="btn" data-k="'+x[0]+'">'+x[1]+'</button>'}).join('')+'</div><p id="m" class="mut">💡 '+q.h+'</p></div>';}
+ else h+='<div class="card ctr"><p class="big">🎉 পৃথিবী তৈরি সম্পন্ন!</p><p>কেন্দ্রমণ্ডল (৩,৪৮৬) → গুরুমণ্ডল (২,৮৮৫) → ভূত্বক (২০)। ভারী ভেতরে, হালকা বাইরে।</p><button class="btn main" id="rs">আবার খেলি 🔁</button></div>';
+ v.innerHTML=h;
+ v.querySelectorAll('[data-k]').forEach(function(b){b.onclick=function(){var q=BQ[bs];
+  if(b.dataset.k==q.a){add(10);bShown.push(q.a);var m=document.getElementById('m');m.textContent='✅ '+q.ok;m.style.color='var(--ok)';b.classList.add('ok');bs++;setTimeout(t1,1400)}
+  else{add(-2);b.classList.add('no');document.getElementById('m').textContent='❌ আবার ভাবো! '+q.h}}});
+ var r=document.getElementById('rs');if(r)r.onclick=function(){bs=0;bShown=[];t1()};
+}
+/* TAB 3 */
+var IT=[['নিকেল (Ni)','cent'],['সিয়াল (সিলিকন + অ্যালুমিনিয়াম)','crust'],['আয়রন অক্সাইড','bary'],['পারদ ও সীসা','cent'],['সিমা (সিলিকন + ম্যাগনেসিয়াম)','crust'],['ম্যাগনেসিয়াম অক্সাইড ও সিলিকন ডাইঅক্সাইড','bary'],['লোহা ও নিকেল (প্রধান উপাদান)','cent'],['লোহা-ম্যাগনেসিয়াম সমৃদ্ধ সিলিকেট খনিজ (ঊর্ধ্ব অংশ)','bary'],['মহাদেশের নিচের স্তর (৩৫ কিমি)','crust'],['ব্যাসল্ট শিলার মোটা স্তর','bary']];
+var ii=0,sc3=0;
+function t2(){
+ var v=document.getElementById('v');
+ if(ii>=IT.length){v.innerHTML='<div class="card ctr"><p class="big">🧪 শেষ! '+sc3+'/'+IT.length+' সঠিক</p><p>'+(sc3>=9?'তুমি উপাদান-মাস্টার! 🏆':sc3>=6?'ভালো হয়েছে! আবার চেষ্টা করলে ১০/১০ পাবে 💪':'১ম ট্যাবে ফিরে আবার পড়ে এসো 📖')+'</p><button class="btn main" id="rs">আবার খেলি 🔁</button></div>';document.getElementById('rs').onclick=function(){ii=0;sc3=0;t2()};return}
+ var it=IT[ii];
+ v.innerHTML='<div class="card"><div class="bar"><i style="width:'+(ii/IT.length*100)+'%"></i></div><p class="mut">উপাদান '+(ii+1)+'/'+IT.length+' – এটি কোন স্তরের?</p><p class="big ctr" style="font-size:1.3rem">🧱 '+it[0]+'</p><div class="ctr"><button class="btn" data-k="crust">ভূত্বক</button><button class="btn" data-k="bary">গুরুমণ্ডল</button><button class="btn" data-k="cent">কেন্দ্রমণ্ডল</button></div><p id="m" class="ctr"></p></div>';
+ v.querySelectorAll('[data-k]').forEach(function(b){b.onclick=function(){var m=document.getElementById('m');
+  v.querySelectorAll('[data-k]').forEach(function(x){x.disabled=true});
+  if(b.dataset.k==it[1]){b.classList.add('ok');m.textContent='✅ সঠিক! +১০';add(10);sc3++}
+  else{b.classList.add('no');m.textContent='❌ সঠিক উত্তর: '+L[it[1]].n.split(' ')[0];add(-2)}
+  setTimeout(function(){ii++;t2()},1300)}});
+}
+/* TAB 4 */
+var Q=[['ভূত্বকের গড় পুরুত্ব কত?',['৫ কিমি','২০ কিমি','৭০০ কিমি','২,৮৮৫ কিমি'],1],
+['সমুদ্রতলের নিচে ভূত্বক কত কিমি পুরু?',['৫ কিমি','২০ কিমি','৩৫ কিমি','১০০ কিমি'],0],
+['মহাদেশের তলদেশে ভূত্বক গড়ে কত পুরু?',['৫ কিমি','১২ কিমি','৩৫ কিমি','২,২৭০ কিমি'],2],
+['সিয়াল স্তর কোন কোন উপাদানে গঠিত?',['সিলিকন ও ম্যাগনেসিয়াম','সিলিকন ও অ্যালুমিনিয়াম','লোহা ও নিকেল','পারদ ও সীসা'],1],
+['সিমা স্তর কোথায় বেশি দেখা যায়?',['পর্বতে','মালভূমিতে','সমুদ্রতলে','সমভূমিতে'],2],
+['গুরুমণ্ডল কত কিমি পুরু?',['২০ কিমি','৭০০ কিমি','২,৮৮৫ কিমি','৩,৪৮৬ কিমি'],2],
+['ঊর্ধ্ব গুরুমণ্ডল কত কিমি পর্যন্ত বিস্তৃত?',['৭০০ কিমি','১,২১৬ কিমি','২,২৭০ কিমি','৩,৪৮৬ কিমি'],0],
+['কেন্দ্রমণ্ডল কত কিমি পুরু?',['২,৮৮৫ কিমি','৩,৪৮৬ কিমি','২,২৭০ কিমি','১,২১৬ কিমি'],1],
+['কেন্দ্রমণ্ডলের তরল বহিরাবরণ কত পুরু?',['১,২১৬ কিমি','২,২৭০ কিমি','২,৮৮৫ কিমি','৫ কিমি'],1],
+['কেন্দ্রমণ্ডলের কঠিন অন্তঃভাগ কত পুরু?',['১,২১৬ কিমি','২,২৭০ কিমি','৭০০ কিমি','৩৫ কিমি'],0],
+['কেন্দ্রমণ্ডলের প্রধান দুই উপাদান কোনটি?',['সিলিকন ও কার্বন','নিকেল ও লোহা','পারদ ও সীসা','সিলিকা ও ম্যাগনেসিয়াম'],1],
+['ভূত্বকের নিচে প্রতি কিমিতে তাপ কত বাড়ে?',['১০° সে.','২০° সে.','৩০° সে.','১০০° সে.'],2]];
+var qi=0,qs=0,streak=0;
+function t3(){
+ var v=document.getElementById('v');
+ if(qi>=Q.length){var st=qs>=11?'⭐⭐⭐ ভূগোল চ্যাম্পিয়ন!':qs>=8?'⭐⭐ দারুণ!':qs>=5?'⭐ ভালো শুরু':'📖 আবার পড়ে এসো';
+ v.innerHTML='<div class="card ctr"><p class="big">🎯 ফলাফল: '+qs+'/'+Q.length+'</p><p class="big">'+st+'</p><button class="btn main" id="rs">আবার খেলি 🔁</button></div>';document.getElementById('rs').onclick=function(){qi=0;qs=0;streak=0;t3()};return}
+ var q=Q[qi];
+ v.innerHTML='<div class="card"><div class="bar"><i style="width:'+(qi/Q.length*100)+'%"></i></div><p class="mut">প্রশ্ন '+(qi+1)+'/'+Q.length+(streak>1?' · 🔥 '+streak+' টানা সঠিক':'')+'</p><p class="big">'+q[0]+'</p>'+q[1].map(function(o,i){return '<button class="btn" data-i="'+i+'" style="display:block;width:100%;text-align:left">'+o+'</button>'}).join('')+'<p id="m"></p></div>';
+ v.querySelectorAll('[data-i]').forEach(function(b){b.onclick=function(){
+  v.querySelectorAll('[data-i]').forEach(function(x){x.disabled=true});
+  var m=document.getElementById('m');
+  if(+b.dataset.i==q[2]){b.classList.add('ok');streak++;qs++;add(10+(streak>2?5:0));m.textContent='✅ সঠিক!'+(streak>2?' 🔥 বোনাস +৫':'')}
+  else{b.classList.add('no');streak=0;add(-2);v.querySelector('[data-i="'+q[2]+'"]').classList.add('ok');m.textContent='❌ সঠিক উত্তরটি সবুজে দেখো'}
+  setTimeout(function(){qi++;t3()},1500)}});
+}
+var T=[t0,t1,t2,t3,t4];
+document.getElementById('tabs').onclick=function(e){var b=e.target.closest('button');if(!b)return;
+ tab=+b.dataset.t;this.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});T[tab]()};
+T[0]();
+</script>
+</body>
+</html>
